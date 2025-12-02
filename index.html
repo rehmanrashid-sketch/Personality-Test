@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Myers & Briggs Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
+    .container { max-width:700px; margin:30px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align:center; }
+    .question { margin-bottom:20px; padding:15px; background:#fafafa; border-radius:6px; border:1px solid #ddd; }
+    button { padding:10px 15px; border:none; border-radius:5px; background:#007bff; color:white; cursor:pointer; }
+    button:hover { background:#0056b3; }
+    .result { margin-top:20px; padding:15px; background:#e8ffe8; border:1px solid #b2ffb2; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Myers & Briggs Personality Test</h1>
+
+    <div id="quiz"></div>
+
+    <button onclick="calculateResult()">Show Result</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { text: "You feel energized when socializing.", type: "E" },
+      { text: "You prefer quiet time alone to recharge.", type: "I" },
+      { text: "You focus on facts and details.", type: "S" },
+      { text: "You look at possibilities and big ideas.", type: "N" },
+      { text: "You make decisions logically.", type: "T" },
+      { text: "You decide based on empathy and harmony.", type: "F" },
+      { text: "You like structure and planning.", type: "J" },
+      { text: "You like flexibility and going with the flow.", type: "P" },
+      { text: "You enjoy group activities more than solo.", type: "E" },
+      { text: "You like to observe quietly before joining in.", type: "I" },
+      { text: "You trust practical experience more than theories.", type: "S" },
+      { text: "You enjoy imagining future possibilities.", type: "N" },
+      { text: "You prefer objective analysis over feelings.", type: "T" },
+      { text: "You are guided by values and emotions.", type: "F" },
+      { text: "You prefer organized schedules.", type: "J" },
+      { text: "You like keeping options open.", type: "P" },
+      { text: "You get energy from interacting with people.", type: "E" },
+      { text: "You recharge best in solitude.", type: "I" },
+      { text: "You focus on what is real and tangible.", type: "S" },
+      { text: "You are drawn to abstract ideas and concepts.", type: "N" },
+      { text: "You rely on logic for decision-making.", type: "T" },
+      { text: "You prioritize harmony and feelings.", type: "F" },
+      { text: "You like to finish tasks ahead of deadlines.", type: "J" },
+      { text: "You adapt easily to changing circumstances.", type: "P" },
+      { text: "You enjoy leading group activities.", type: "E" }
+    ];
+
+    const typeDescriptions = {
+      ISTJ: 'Responsible, practical, detail-oriented.',
+      ISFJ: 'Loyal, caring, supportive.',
+      INFJ: 'Insightful, idealistic, deep thinker.',
+      INTJ: 'Strategic, long-term planner, independent.',
+      ISTP: 'Practical, hands-on problem solver.',
+      ISFP: 'Artistic, sensitive, present-focused.',
+      INFP: 'Idealistic, empathetic, value-driven.',
+      INTP: 'Analytical, curious, theoretical.',
+      ESTP: 'Energetic, action-oriented, bold.',
+      ESFP: 'Fun-loving, sociable, spontaneous.',
+      ENFP: 'Creative, inspiring, enthusiastic.',
+      ENTP: 'Inventive, witty, challenge-seeker.',
+      ESTJ: 'Organized, leader, reliable.',
+      ESFJ: 'Friendly, caring, responsible.',
+      ENFJ: 'Charismatic, guiding others, supportive.',
+      ENTJ: 'Decisive, strategic, goal-oriented.'
+    };
+
+    const quizDiv = document.getElementById("quiz");
+
+    questions.forEach((q, index) => {
+      quizDiv.innerHTML += `
+        <div class='question'>
+          <p><strong>${index + 1}. ${q.text}</strong></p>
+          <label><input type='radio' name='q${index}' value='yes'> Yes</label>
+          <label style='margin-left:10px;'><input type='radio' name='q${index}' value='no'> No</label>
+        </div>
+      `;
+    });
+
+    function calculateResult() {
+      let scores = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+
+      questions.forEach((q, i) => {
+        let answer = document.querySelector(`input[name='q${i}']:checked`);
+        if (answer && answer.value === "yes") {
+          scores[q.type]++;
+        }
+      });
+
+      // MBTI calculation: each dichotomy
+      const type =
+        (scores.E >= scores.I ? "E" : "I") +
+        (scores.S >= scores.N ? "S" : "N") +
+        (scores.T >= scores.F ? "T" : "F") +
+        (scores.J >= scores.P ? "J" : "P");
+
+      const description = typeDescriptions[type] || 'Unique personality mix.';
+
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
+        <h2>Your Personality Type: ${type}</h2>
+        <p>${description}</p>
+        <p><strong>Scores:</strong> E:${scores.E} I:${scores.I} | S:${scores.S} N:${scores.N} | T:${scores.T} F:${scores.F} | J:${scores.J} P:${scores.P}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
